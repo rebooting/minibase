@@ -7,6 +7,7 @@ Currently it's capable of setting up a local environment with a localstack insta
 It's very WIP.
 
 Why Minibase? Because it's a play on the Airbase project my colleague is working on.
+
 Requirements:
 - Docker
 - Docker-compose
