@@ -1,0 +1,20 @@
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y \
+    curl unzip\
+    git python3 python3-pip python3-setuptools python3-wheel python3.11-venv \
+    && rm -rf /var/lib/apt/lists/* && \
+    curl -fsSL https://get.pulumi.com | sh && mv /root/.pulumi/bin/* /usr/local/bin/ 
+
+COPY ./docker/aws.sh .
+RUN chmod +x aws.sh && ./aws.sh && rm aws.sh
+# add user pulumi 1000:1000
+RUN useradd -m pulumi -u 1000 -s /bin/bash
+USER pulumi
+WORKDIR /app
+ENV AWS_REGION=us-east-1
+ENV AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+ENV AWS_SECRET_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE
+# ENV for AWS endpoint
+ENV AWS_ENDPOINT_URL=http://localstack:4566
+
+    
