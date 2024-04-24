@@ -7,6 +7,11 @@ Currently it's capable of setting up a local environment with a localstack insta
 It's very WIP.
 
 Why Minibase? Because it's a play on the Airbase project my colleague is working on.
+Requirements:
+- Docker
+- Docker-compose
+- Make
+- some Linux VM or WSL2 ( this was developed on WSL2)
 
 ## Quickstart
 ### build the pulumi image
