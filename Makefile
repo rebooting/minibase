@@ -2,12 +2,16 @@
 UID := $(shell id -u)
 GID := $(shell id -g)
 NETWORK := default_minibase
+STACK_NAME := dev
 
 build_pulumi:
 	docker build -t local/pulumi:latest -f docker/Dockerfile.pulumi .
 
 shell_pulumi:
-	docker run -it -u $(UID) --network default_minibase  --rm -v $$PWD/iac:/app -w /app local/pulumi:latest /bin/bash
+	docker run -it -u $(UID) \
+	--network default_minibase \
+	-v $$PWD/stacks:/home/pulumi \
+	--rm -v $$PWD/iac:/app -w /app local/pulumi:latest /bin/bash
 
 new_pulumi_python_project:
 	docker run -u $(UID) -it --rm -v $$PWD/stacks:/home/pulumi -v $$PWD/iac:/app -w /app local/pulumi:latest /bin/sh -c "cd /app && pulumi login --local && pulumi new python $(project_name)"
@@ -29,6 +33,10 @@ compose-down:
 
 compose-logs:
 	COMPOSE_PROJECT_NAME=default docker-compose logs -f
+
+pulumi_init:
+	docker run -u $(UID) --network $(NETWORK) -it --rm -v $$PWD/iac:/app -v $$PWD/stacks:/home/pulumi -w /app local/pulumi:latest /bin/bash -c "cd /app && \
+	source venv/bin/activate && pulumi login --local && pulumi stack init $(STACK_NAME)"
 deploy:
 	docker run -u $(UID) --network $(NETWORK) -it --rm -v $$PWD/iac:/app -v $$PWD/stacks:/home/pulumi -w /app local/pulumi:latest /bin/bash -c "cd /app && \
 	source venv/bin/activate && pulumi login --local && PULUMI_CONFIG_PASSPHRASE= pulumilocal up -y"
