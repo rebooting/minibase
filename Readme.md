@@ -1,12 +1,12 @@
 # Minibase
 
-This project is an attempt to have a convenient local loop for development for lambada functions based on Python and Pulumi
+This project is an attempt to have a convenient local loop for development for lambada functions based on Python and deployed with Pulumi Python.
 
-Currently it's capable of setting up a local environment with a localstack instance and an S3 demo.
+Currently it's capable of setting up a local environment with a localstack instance and provisioning a S3 bucket.
 
 It's very WIP.
 
-Why Minibase? Because it's a play on the Airbase project my colleague is working on.
+Why Minibase? Because it's a play on the Airbase project my colleague (https://github.com/eliotlim/) is working on.
 
 Requirements:
 - Docker
