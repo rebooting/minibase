@@ -27,6 +27,7 @@ if running for the first time
 
 ``` make restore_pulumi```
 
+``` make pulumi_init```
 
 ###this deploys the S3 bucket to localstack
 
