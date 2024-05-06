@@ -1,0 +1,13 @@
+{
+    "name": "ts-iac",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^18"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "^3.113.0",
+        "typescript": "^5.0.0",
+        "@pulumi/aws": "^6.32.0",
+        "@pulumi/awsx": "^2.8.0"
+    }
+}
