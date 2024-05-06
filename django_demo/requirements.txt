@@ -1,0 +1,4 @@
+django
+zappa
+psycopg2
+setuptools
