@@ -1,0 +1,8 @@
+{
+  "dev": {
+    "deployment_package": {
+      "location": "./lambda_function.zip"  
+    },
+    "django_settings": "sample.settings"
+  }
+}
