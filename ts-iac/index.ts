@@ -3,6 +3,19 @@ import * as aws from "@pulumi/aws";
 import {apigateway} from "@pulumi/awsx/classic"; 
 import * as pulumi from "@pulumi/pulumi"
 
+// create S3 bucket called minibase-bucket
+const bucket = new aws.s3.Bucket("minibase-bucket",{
+    bucket: "minibase-bucket",
+    forceDestroy: true
+});
+
+//upload the docker-compose.yml file to the bucket
+const object = new aws.s3.BucketObject("django-demo-dev.tgz", {
+    bucket: bucket.bucket,
+    source: new pulumi.asset.FileAsset("/django_demo/django-demo-dev.tgz"),
+    key: "dev_app_current_project.tar.gz",
+});
+
 // create iam for lambda
 const lambdaRole = new aws.iam.Role("lambdaRole", {
     assumeRolePolicy: JSON.stringify({
@@ -24,11 +37,16 @@ const helloLambda = new aws.lambda.Function("helloLambda", {
     handler: "handler.lambda_handler",
     role: lambdaRole.arn,
     // code: new pulumi.asset.FileArchive("../lambdas/hello.zip"),
-    code: new pulumi.asset.FileArchive("/django_demo/django-demo-dev.zip"),
+    code: new pulumi.asset.FileArchive("/django_demo/handler_stub.zip"),
     name: "helloLambda",
     // arm architecture
     packageType: "Zip",
-    architectures: ["arm64"]
+    architectures: ["arm64"],
+    environment: {
+        variables: {
+            S3_ENDPOINT_URL: "http://localhost:4566",
+        }
+    }
 });
 
 // // create api gateway
@@ -181,5 +199,11 @@ const stage = new aws.apigateway.Stage("apiStage", {
     stageName: "prod",
 });
 
+// Export S3 URL for localstack
+exports.bucketName = pulumi.interpolate`http://localhost:4566/${bucket.bucket}`;
+
 // Export the URL of the deployed API
 exports.localstackApiGatewayEndpoint = pulumi.interpolate`http://localhost:4566/restapis/${api.id}/local/_user_request_/`;
+
+// arn of bucket
+exports.bucketArn = bucket.arn

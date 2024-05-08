@@ -3,6 +3,11 @@
     "deployment_package": {
       "location": "./lambda_function.zip"  
     },
-    "django_settings": "sample.settings"
+    "django_settings": "sample.settings",
+    "slim_handler": "true",
+    "s3_bucket": "minibase-bucket",
+    "aws_endpoint_urls": {
+      "s3": "http://localhost:4566"
+    }
   }
 }

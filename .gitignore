@@ -4,3 +4,7 @@ volume/*
 ts-iac/node_modules
 ts-iac/venv
 django_demo/demosite-dev.zip
+!dist/.placeholder
+dist/
+django_demo/handler_stub.zip
+django_demo/django-demo-dev.tgz

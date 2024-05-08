@@ -24,8 +24,17 @@ zappa_pack:
 	$(VENV_ACTIVATE) && zappa package dev
 
 docker_build:
+	rm -f django-demo-dev.tgz
+	rm -f handler_stub.zip
 	docker build -t localhost/django_sample -f Dockerfile.build .
 	docker create --name lambda_artefact localhost/django_sample echo
-	docker cp lambda_artefact:/app/django-demo-dev.zip django-demo-dev.zip
+	docker cp lambda_artefact:/app/django-demo-dev.tgz django-demo-dev.tgz
+	docker cp lambda_artefact:/app/handler_stub.zip handler_stub.zip
 	docker rm lambda_artefact
-	
+
+hack_zappa:
+	unzip handler_stub.zip zappa_settings.py
+	# Replace the line in the file
+	 sed -i "s|ARCHIVE_PATH=.*|ARCHIVE_PATH='s3://localhost:4566/minibase-bucket/django-demo-dev.tgz'|" zappa_settings.py
+	# Replace the file in the zip
+	zip -u handler_stub.zip zappa_settings.py
