@@ -12,25 +12,29 @@ new-django-app:
 	$(VENV_ACTIVATE) && python manage.py startapp $(APP_NAME)
 
 venv:
-	python3 -m venv ~/venv
+	python3.9 -m venv ~/venv
 restore: venv
 	$(VENV_ACTIVATE) && pip install -r requirements.txt
-
+	# $(VENV_ACTIVATE) && pip install --prefer-binary numpy
 
 migrate:
 	$(VENV_ACTIVATE) && python manage.py migrate
 
 zappa_pack:
-	$(VENV_ACTIVATE) && zappa package dev
+	$(VENV_ACTIVATE) && zappa package dev 
 
 docker_build:
 	rm -f django-demo-dev.tgz
 	rm -f handler_stub.zip
-	docker build -t localhost/django_sample -f Dockerfile.build .
+	rm -f ../dist/dev_app_current_project.tar.gz
+	rm -f ../dist/handler_stub.zip
+	docker build  --progress=plain -t localhost/django_sample -f Dockerfile.build .
 	docker create --name lambda_artefact localhost/django_sample echo
 	docker cp lambda_artefact:/app/django-demo-dev.tgz django-demo-dev.tgz
 	docker cp lambda_artefact:/app/handler_stub.zip handler_stub.zip
 	docker rm lambda_artefact
+	mv django-demo-dev.tgz ../dist/dev_app_current_project.tar.gz
+	mv handler_stub.zip ../dist/handler_stub.zip
 
 hack_zappa:
 	unzip handler_stub.zip zappa_settings.py

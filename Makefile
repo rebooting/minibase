@@ -45,7 +45,9 @@ pulumi_init:
 	source venv/bin/activate && pulumi login --local && pulumi stack init $(STACK_NAME)"
 deploy:
 	docker run -u $(UID) --network $(NETWORK) -it --rm \
-	-v $$PWD/ts-iac:/app -v $$PWD/stacks:/home/$(IMAGE_HOME) \
+	-v $$PWD/ts-iac:/app \
+	-v $$PWD/dist:/dist \
+	-v $$PWD/stacks:/home/$(IMAGE_HOME) \
 	-v $$PWD/django_demo:/django_demo/ \
 	-w /app local/pulumi:latest /bin/bash -c "cd /app && \
 	source venv/bin/activate && pulumi login --local && pulumi stack select dev || pulumi stack init dev && PULUMI_CONFIG_PASSPHRASE= pulumilocal up -y"

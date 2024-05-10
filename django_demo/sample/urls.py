@@ -17,6 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+import numpy as np
 from sample_app.views import index, page_two
 urlpatterns = [
     path("admin/", admin.site.urls),

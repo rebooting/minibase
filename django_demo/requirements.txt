@@ -1,4 +1,5 @@
 django
 zappa
 psycopg2-binary
-setuptools
+numpy
+# setuptools

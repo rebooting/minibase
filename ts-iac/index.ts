@@ -10,9 +10,11 @@ const bucket = new aws.s3.Bucket("minibase-bucket",{
 });
 
 //upload the docker-compose.yml file to the bucket
-const object = new aws.s3.BucketObject("django-demo-dev.tgz", {
+const object = new aws.s3.BucketObject("dev_mysite_current_project.tar.gz", {
     bucket: bucket.bucket,
-    source: new pulumi.asset.FileAsset("/django_demo/django-demo-dev.tgz"),
+    // source: new pulumi.asset.FileAsset("/dist/dev_mysite_current_project.tar.gz"),
+    // key: "dev_mysite_current_project.tar.gz",
+    source: new pulumi.asset.FileAsset("/dist/dev_app_current_project.tar.gz"),
     key: "dev_app_current_project.tar.gz",
 });
 
@@ -37,7 +39,7 @@ const helloLambda = new aws.lambda.Function("helloLambda", {
     handler: "handler.lambda_handler",
     role: lambdaRole.arn,
     // code: new pulumi.asset.FileArchive("../lambdas/hello.zip"),
-    code: new pulumi.asset.FileArchive("/django_demo/handler_stub.zip"),
+    code: new pulumi.asset.FileArchive("/dist/handler_stub.zip"),
     name: "helloLambda",
     // arm architecture
     packageType: "Zip",
@@ -45,6 +47,7 @@ const helloLambda = new aws.lambda.Function("helloLambda", {
     environment: {
         variables: {
             S3_ENDPOINT_URL: "http://localhost:4566",
+            DEVMODE: "True"
         }
     }
 });
@@ -120,11 +123,10 @@ api.id.apply(id => {
 
 
 
-
 const catchAllResource = api.rootResourceId.apply(rootResourceId => 
     aws.apigateway.getResource({
         restApiId: apiId,
-        path: '/'
+        path: '/',
     })
 );
 
