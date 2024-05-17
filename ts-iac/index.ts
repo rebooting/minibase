@@ -34,7 +34,7 @@ const lambdaRole = new aws.iam.Role("lambdaRole", {
 
 // create lambda with python 3.11 zip file from ../lambdas/hello.zip
 const helloLambda = new aws.lambda.Function("helloLambda", {
-    runtime: "python3.11",
+    runtime: "python3.12",
     // handler: "main.lambda_handler",
     handler: "handler.lambda_handler",
     role: lambdaRole.arn,
