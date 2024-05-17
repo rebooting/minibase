@@ -1,0 +1,14 @@
+FROM public.ecr.aws/sam/build-python3.11:latest
+
+COPY . /app
+WORKDIR /app
+# RUN make restore && make migrate && make zappa_pack \
+RUN make restore && make zappa_pack \
+    && mv app-dev-*.gz django-demo-dev.tgz \
+    && mv handler*.zip handler_stub.zip \
+    && cd ~/venv && tar -czvf /app/venv.tgz .
+
+FROM scratch
+COPY --from=0 /app/django-demo-dev.tgz /app/django-demo-dev.tgz
+COPY --from=0 /app/handler_stub.zip /app/handler_stub.zip
+COPY --from=0 /app/venv.tgz /app/venv.tgz
