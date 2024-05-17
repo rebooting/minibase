@@ -4,10 +4,11 @@
       "location": "./lambda_function.zip"  
     },
     "django_settings": "sample.settings",
-    "slim_handler": "true",
+    "slim_handler": true,
     "s3_bucket": "minibase-bucket",
     "aws_endpoint_urls": {
       "s3": "http://localhost:4566"
-    }
+    },
+    "use_precompiled_packages": false
   }
 }
