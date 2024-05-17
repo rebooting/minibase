@@ -1,9 +1,9 @@
-# FROM mcr.microsoft.com/devcontainers/python:dev-3.12-bookworm
-FROM public.ecr.aws/amazonlinux/amazonlinux:2023
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends \
-#     python3-venv 
-RUN yum update -y && yum install -y python3.11 python3.11-pip make zip python3.11-devel
+FROM mcr.microsoft.com/devcontainers/python:dev-3.12-bookworm
+# FROM public.ecr.aws/amazonlinux/amazonlinux:2023
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends \
+     build-essential zip python3-setuptools
+# RUN yum update -y && yum install -y python3.11 python3.11-pip make zip python3.11-devel 
 
 
 COPY . /app
